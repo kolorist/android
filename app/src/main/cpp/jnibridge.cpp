@@ -1,6 +1,8 @@
 #include <jni.h>
-#include <android/asset_manager_jni.h>
-#include <android/native_window_jni.h>
+#include <android/log.h>
+#include <chrono>
+// #include <android/asset_manager_jni.h>
+// #include <android/native_window_jni.h>
 
 // #include <pthread.h>
 // #include <android_utils.h>
@@ -22,9 +24,46 @@ extern "C" {
 	JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchMove(JNIEnv* env, jobject obj, jfloat x, jfloat y);
 };
 
+void force_lhs(int* s, int n)
+{
+	*s = 0;
+	for (int i = 0; i < n; i++) {
+		*s += i;
+	}
+}
+
+void no_lhs(int *s, int n)
+{
+	int is = 0;
+	for (int i = 0; i < n; i++) {
+		is += i;
+	}
+	*s = is;
+}
+
 JNIEXPORT void JNICALL 
 Java_com_calyx_mainapp_MainActivity_PreInitialize(JNIEnv* env, jobject obj, jobject assetMgr)
 {
+	__android_log_print(ANDROID_LOG_INFO, "native_log", "PreInitialize");
+
+	int sum = 0;
+	
+	for (int i = 0; i < 50; i++) {
+		auto start = std::chrono::system_clock::now();
+		force_lhs(&sum, 10000000);
+		auto end = std::chrono::system_clock::now();
+		std::chrono::microseconds elapsed_ms = end - start;
+		__android_log_print(ANDROID_LOG_INFO, "native_log", "time 1 = %lld microsec", elapsed_ms.count());
+	}
+
+	for (int i = 0; i < 50; i++) {
+		auto start = std::chrono::system_clock::now();
+		no_lhs(&sum, 10000000);
+		auto end = std::chrono::system_clock::now();
+		std::chrono::microseconds elapsed_ms = end - start;
+		__android_log_print(ANDROID_LOG_INFO, "native_log", "time 2 = %lld microsec", elapsed_ms.count());
+	}
+	
 	// native_console_log("PreInitialize");
 	// g_RenderWindow.pm_NativeWindow = nullptr;
 	// g_RenderWindow.pm_IsGameThreadInit = false;

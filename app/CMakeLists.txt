@@ -33,7 +33,7 @@ else ()
   set(OPENGL_LIB GLESv3)
 endif (${ANDROID_PLATFORM_LEVEL} LESS 12)
 
-# add_subdirectory (../../../../../../src "${PROJECT_BINARY_DIR}/stepone")
+add_subdirectory (../../../../../../src "${PROJECT_BINARY_DIR}/floral")
 # add_subdirectory (../../../../../glm "${PROJECT_BINARY_DIR}/glm")
 # add_subdirectory (../../../../../imgui-1.53 "${PROJECT_BINARY_DIR}/imgui")
 # add_subdirectory (../../../../../rapidjson-1.1.0 "${PROJECT_BINARY_DIR}/rapidjson")
