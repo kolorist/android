@@ -19,39 +19,74 @@ cmake_minimum_required(VERSION 3.4.1)
 #                    detection.
 #   [24, infinite)   ES2 & ES3 & Vulkan
 
+# building platform
+if (${ANDROID_BUILD})
+	message(STATUS "Building for Android Platform")
+endif (${ANDROID_BUILD})
+
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall")
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11 -fno-rtti -fno-exceptions -Wall")
+
 if (${ANDROID_PLATFORM_LEVEL} LESS 12)
-  message(FATAL_ERROR "OpenGL 2 is not supported before API level 11 \
-                      (currently using ${ANDROID_PLATFORM_LEVEL}).")
-  return()
+	message(FATAL_ERROR "OpenGL 2 is not supported before API level 11 \
+	(currently using ${ANDROID_PLATFORM_LEVEL}).")
+	return()
 elseif (${ANDROID_PLATFORM_LEVEL} LESS 18)
-  add_definitions("-DDYNAMIC_ES3")
-  set(GL3STUB_SRC gl3stub.c)
-  set(OPENGL_LIB GLESv2)
+	message(STATUS "Building using API level 12 - 17")
+	add_definitions("-DDYNAMIC_ES3")
+	set(GL3STUB_SRC gl3stub.c)
+	set(OPENGL_LIB GLESv2)
 else ()
-  set(OPENGL_LIB GLESv3)
+	message(STATUS "Building using API level >= 18")
+	set(OPENGL_LIB GLESv3)
 endif (${ANDROID_PLATFORM_LEVEL} LESS 12)
 
-add_subdirectory (../../../../../../src "${PROJECT_BINARY_DIR}/floral")
-# add_subdirectory (../../../../../glm "${PROJECT_BINARY_DIR}/glm")
-# add_subdirectory (../../../../../imgui-1.53 "${PROJECT_BINARY_DIR}/imgui")
-# add_subdirectory (../../../../../rapidjson-1.1.0 "${PROJECT_BINARY_DIR}/rapidjson")
-# add_subdirectory (../../../../../libpng "${PROJECT_BINARY_DIR}/libpng")
-# add_subdirectory (../../../../../zlib-1.2.8 "${PROJECT_BINARY_DIR}/zlib")
+add_subdirectory (../../floral "${PROJECT_BINARY_DIR}/floral")
+add_subdirectory (../../helich "${PROJECT_BINARY_DIR}/helich")
+add_subdirectory (../../calyx "${PROJECT_BINARY_DIR}/calyx")
+add_subdirectory (../../refrain2 "${PROJECT_BINARY_DIR}/refrain2")
+add_subdirectory (../../clover "${PROJECT_BINARY_DIR}/clover")
 
 add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
-	-DPLATFORM_ANDROID
 	-DPNG_ARM_NEON_OPT=0)
+	
+if (${ANDROID_BUILD})
+	message(STATUS "android will be built using Android configs")
+	add_definitions (
+		-DPLATFORM_POSIX)
+		
+	# platform abi
+	if (${ANDROID_ABI} STREQUAL "arm64-v8a")
+		message(STATUS "android Android ABI: arm64")
+		add_definitions (
+			-DPOSIX64)
+	else ()
+		message(STATUS "android Android ABI: arm")
+		add_definitions (
+			-DPOSIX32)
+	endif (${ANDROID_ABI} STREQUAL "arm64-v8a")	
+	
+else ()
+	message(STATUS "android will be built using Windows configs")
+	add_definitions (
+		-DPLATFORM_WINDOWS)
+endif (${ANDROID_BUILD})
 
 add_library(maincode SHARED
-            "src/main/cpp/jnibridge.cpp")
+	"src/main/cpp/jnibridge.cpp"
+	"src/main/cpp/main.cpp"
+	"src/main/cpp/memory/memory_system.cpp")
 
 # Include libraries needed for gles3jni lib
 target_link_libraries(maincode
-            ${OPENGL_LIB}
-            android
-            EGL
-            log
-            m)
+	floral
+	helich
+	clover
+	refrain2
+	calyx
+	${OPENGL_LIB}
+	android
+	EGL
+	log
+	m)

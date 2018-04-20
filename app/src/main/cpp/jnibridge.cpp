@@ -1,6 +1,8 @@
 #include <jni.h>
 #include <android/log.h>
 #include <chrono>
+
+#include <platform/android/entry_point.h>
 // #include <android/asset_manager_jni.h>
 // #include <android/native_window_jni.h>
 
@@ -44,6 +46,7 @@ void no_lhs(int *s, int n)
 JNIEXPORT void JNICALL 
 Java_com_calyx_mainapp_MainActivity_PreInitialize(JNIEnv* env, jobject obj, jobject assetMgr)
 {
+	/*
 	__android_log_print(ANDROID_LOG_INFO, "native_log", "PreInitialize");
 
 	int sum = 0;
@@ -63,6 +66,7 @@ Java_com_calyx_mainapp_MainActivity_PreInitialize(JNIEnv* env, jobject obj, jobj
 		std::chrono::microseconds elapsed_ms = end - start;
 		__android_log_print(ANDROID_LOG_INFO, "native_log", "time 2 = %lld microsec", elapsed_ms.count());
 	}
+	*/
 	
 	// native_console_log("PreInitialize");
 	// g_RenderWindow.pm_NativeWindow = nullptr;
@@ -70,12 +74,14 @@ Java_com_calyx_mainapp_MainActivity_PreInitialize(JNIEnv* env, jobject obj, jobj
 	
 	// init_event_queue();
 	// set_asset_manager(AAssetManager_fromJava(env, assetMgr));
+	android_pre_init();
 }
 
 JNIEXPORT void JNICALL
 Java_com_calyx_mainapp_MainActivity_Initialize(JNIEnv* env, jobject obj)
 {
 	// native_console_log("Initialize");
+	android_init();
 }
 
 JNIEXPORT void JNICALL
@@ -94,6 +100,7 @@ Java_com_calyx_mainapp_MainActivity_UpdateSurface(JNIEnv* env, jobject obj, jobj
 	// } else {
 		// ANativeWindow_release(g_NativeWindow);
 	// }
+	android_update_surface();
 }
 
 // input
@@ -104,6 +111,7 @@ Java_com_calyx_mainapp_MainActivity_OnTouchDown(JNIEnv* env, jobject obj, jfloat
 	// float mY = y;
 	// native_console_logf("TouchDown @ %f - %f", mX, mY);
 	// queue_touch_event(TouchEventType::TouchDown, mX, mY);
+	android_push_touch_event();
 }
 
 JNIEXPORT void JNICALL
@@ -113,6 +121,7 @@ Java_com_calyx_mainapp_MainActivity_OnTouchUp(JNIEnv* env, jobject obj, jfloat x
 	// float mY = y;
 	// native_console_logf("TouchUp @ %f - %f", mX, mY);
 	// queue_touch_event(TouchEventType::TouchUp, mX, mY);
+	android_push_touch_event();
 }
 
 JNIEXPORT void JNICALL
@@ -122,4 +131,5 @@ Java_com_calyx_mainapp_MainActivity_OnTouchMove(JNIEnv* env, jobject obj, jfloat
 	// float mY = y;
 	// native_console_logf("TouchMove @ %f - %f", mX, mY);
 	// queue_touch_event(TouchEventType::TouchMove, mX, mY);
+	android_push_touch_event();
 }
