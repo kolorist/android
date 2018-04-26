@@ -2,9 +2,11 @@
 #include <android/log.h>
 #include <chrono>
 
+#include <platform/android/system.h>
 #include <platform/android/entry_point.h>
 // #include <android/asset_manager_jni.h>
-// #include <android/native_window_jni.h>
+#include <android/native_window.h>
+#include <android/native_window_jni.h>
 
 // #include <pthread.h>
 // #include <android_utils.h>
@@ -81,7 +83,7 @@ JNIEXPORT void JNICALL
 Java_com_calyx_mainapp_MainActivity_Initialize(JNIEnv* env, jobject obj)
 {
 	// native_console_log("Initialize");
-	android_init();
+	//android_init();
 }
 
 JNIEXPORT void JNICALL
@@ -100,7 +102,13 @@ Java_com_calyx_mainapp_MainActivity_UpdateSurface(JNIEnv* env, jobject obj, jobj
 	// } else {
 		// ANativeWindow_release(g_NativeWindow);
 	// }
-	android_update_surface();
+	static bool init = false;
+	if (!init) {
+		ANativeWindow* wnd = ANativeWindow_fromSurface(env, surface);
+		android_update_surface(wnd);
+		android_init();
+		init = true;
+	}
 }
 
 // input

@@ -46,6 +46,7 @@ add_subdirectory (../../helich "${PROJECT_BINARY_DIR}/helich")
 add_subdirectory (../../calyx "${PROJECT_BINARY_DIR}/calyx")
 add_subdirectory (../../refrain2 "${PROJECT_BINARY_DIR}/refrain2")
 add_subdirectory (../../clover "${PROJECT_BINARY_DIR}/clover")
+add_subdirectory (../../insigne "${PROJECT_BINARY_DIR}/insigne")
 
 add_definitions(
 	-D_CRT_SECURE_NO_WARNINGS
@@ -85,8 +86,8 @@ target_link_libraries(maincode
 	clover
 	refrain2
 	calyx
+	insigne
 	${OPENGL_LIB}
 	android
-	EGL
 	log
 	m)

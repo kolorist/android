@@ -2,6 +2,11 @@
 #include <context.h>
 
 #include <clover.h>
+#include <unistd.h>
+
+#include <insigne/driver.h>
+#include <insigne/render.h>
+#include <insigne/buffers.h>
 
 namespace calyx {
 
@@ -13,10 +18,18 @@ namespace calyx {
 	void run(event_buffer_t* i_evtBuffer)
 	{
 		CLOVER_VERBOSE("app run");
+		
+		insigne::initialize_driver();
+		insigne::initialize_render_thread();
+		insigne::wait_for_initialization();
+
 		u32 event = 0;
+		static u32 si = 0;
 		while (true) {
 			while (i_evtBuffer->try_pop_into(event)) {
-				CLOVER_VERBOSE("%d", event);
+				si++;
+				CLOVER_VERBOSE("%d", event + si);
+				usleep(16000);
 			}
 		}
 	}

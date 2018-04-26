@@ -6,6 +6,8 @@
 
 #include <context.h>
 
+#include <insigne/memory.h>
+
 helich::memory_manager							g_MemoryManager;
 
 // allocators for amborella
@@ -24,6 +26,11 @@ namespace refrain2 {
 	FreelistAllocator							g_TaskDataAllocator;
 };
 
+// allocators for insigne
+namespace insigne {
+	linear_allocator_t							g_persistance_allocator;
+};
+
 namespace helich {
 	void init_memory_system()
 	{
@@ -32,7 +39,8 @@ namespace helich {
 				memory_region<calyx::stack_allocator_t> 	{ "calyx/subsystems",			SIZE_MB(16),	&calyx::g_allocators.subsystems_allocator },
 				memory_region<clover::LinearAllocator>		{ "clover/allocator",			SIZE_MB(32),	&clover::g_LinearAllocator },
 				memory_region<refrain2::FreelistAllocator>	{ "refrain2/task",				SIZE_MB(4),		&refrain2::g_TaskAllocator },
-				memory_region<refrain2::FreelistAllocator>	{ "refrain2/taskdata",			SIZE_MB(32),	&refrain2::g_TaskDataAllocator }
+				memory_region<refrain2::FreelistAllocator>	{ "refrain2/taskdata",			SIZE_MB(32),	&refrain2::g_TaskDataAllocator },
+				memory_region<insigne::linear_allocator_t>	{ "insigne/persist",		SIZE_MB(32),	&insigne::g_persistance_allocator }
 				);
 	}
 }
