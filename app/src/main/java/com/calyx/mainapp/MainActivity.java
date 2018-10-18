@@ -15,7 +15,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2 {
     protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		System.loadLibrary("maincode");
+		System.loadLibrary("insigne_dev");
 		// native pre-init
 		m_AssetManager = getResources().getAssets();
 		PreInitialize(m_AssetManager);
@@ -40,6 +40,8 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2 {
 	protected void onPause()
 	{
 		super.onPause();
+		
+		// 
 	}
 
 	protected void onResume()
