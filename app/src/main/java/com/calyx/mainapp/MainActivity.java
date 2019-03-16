@@ -1,6 +1,7 @@
 package com.calyx.mainapp;
 
 import android.app.Activity;
+import android.util.Log;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.widget.RelativeLayout;
@@ -80,10 +81,12 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2 {
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
+		Log.v("java", "surfaceChanged");
 		UpdateSurface(holder.getSurface());
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
+		Log.v("java", "surfaceCreated");
     }
 	
 	public void surfaceRedrawNeeded(SurfaceHolder holder) {

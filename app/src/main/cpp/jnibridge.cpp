@@ -44,13 +44,15 @@ Java_com_calyx_mainapp_MainActivity_UpdateSurface(JNIEnv* env, jobject obj, jobj
 JNIEXPORT void JNICALL
 Java_com_calyx_mainapp_MainActivity_OnTouchDown(JNIEnv* env, jobject obj, jfloat x, jfloat y)
 {
-
+	android_push_touch_move_event((unsigned int)x, (unsigned int)y);
+	//android_push_touch_event();
 }
 
 JNIEXPORT void JNICALL
 Java_com_calyx_mainapp_MainActivity_OnTouchUp(JNIEnv* env, jobject obj, jfloat x, jfloat y)
 {
-
+	android_push_touch_move_event((unsigned int)x, (unsigned int)y);
+	//android_push_touch_event();
 }
 
 JNIEXPORT void JNICALL
