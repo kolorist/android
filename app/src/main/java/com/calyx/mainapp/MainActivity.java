@@ -37,17 +37,54 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2 {
     }
 	
 	// life-cycle
+	@Override
+	protected void onStart()
+	{
+		super.onStart();
+		
+		OnStart();
+	}
+	
 	@Override 
 	protected void onPause()
 	{
 		super.onPause();
 		
-		// 
+		OnPause();
 	}
 
+	@Override
 	protected void onResume()
 	{
 		super.onResume();
+		
+		OnResume();
+	}
+	
+	@Override
+	protected void onStop()
+	{
+		super.onStop();
+		
+		OnStop();
+	}
+	
+	@Override
+	protected void onDestroy()
+	{
+		super.onDestroy();
+		
+		OnDestroy();
+	}
+	
+	// surface
+	
+	@Override
+	public void onWindowFocusChanged(boolean hasFocus)
+	{
+		super.onWindowFocusChanged(hasFocus);
+		
+		OnWindowFocusChanged(hasFocus);
 	}
 
 	// input
@@ -81,12 +118,11 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2 {
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-		Log.v("java", "surfaceChanged");
 		UpdateSurface(holder.getSurface());
     }
 
     public void surfaceCreated(SurfaceHolder holder) {
-		Log.v("java", "surfaceCreated");
+		SurfaceCreated(holder.getSurface());
     }
 	
 	public void surfaceRedrawNeeded(SurfaceHolder holder) {
@@ -104,7 +140,16 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2 {
 	
 	public native void PreInitialize(AssetManager assetManager);
 	public native void Initialize();
+	public native void SurfaceCreated(Surface surface);
 	public native void UpdateSurface(Surface surface);
+	
+	// life cycle
+	public native void OnStart();
+	public native void OnPause();
+	public native void OnResume();
+	public native void OnStop();
+	public native void OnDestroy();
+	public native void OnWindowFocusChanged(boolean hasFocus);
 
 	// native input
 	public native void OnTouchDown(float x, float y);
