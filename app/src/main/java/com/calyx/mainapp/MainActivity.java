@@ -129,7 +129,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2 {
 	}
 
     public void surfaceDestroyed(SurfaceHolder holder) {
-		UpdateSurface(null);
+		SurfaceDestroyed(holder.getSurface());
     }
 
 	// -----------------------------------------
@@ -141,6 +141,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2 {
 	public native void PreInitialize(AssetManager assetManager);
 	public native void Initialize();
 	public native void SurfaceCreated(Surface surface);
+	public native void SurfaceDestroyed(Surface surface);
 	public native void UpdateSurface(Surface surface);
 	
 	// life cycle
