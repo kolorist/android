@@ -7,13 +7,14 @@
 #include <android/native_window.h>
 #include <android/native_window_jni.h>
 
+#define JNI_INFO(...) __android_log_print(ANDROID_LOG_INFO, "adb-jni", __VA_ARGS__)
 #define JNI_VERBOSE(...) __android_log_print(ANDROID_LOG_VERBOSE, "adb-jni", __VA_ARGS__)
 
 extern "C" {
 
 // life cycle callbacks
 // onCreate - Step 1
-JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_PreInitialize(JNIEnv* env, jobject obj, jobject assetMgr);
+JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_PreInitialize(JNIEnv* env, jobject obj, jobject assetMgr, jstring filesDir, jstring obbDir, jstring externalFilesDir);
 // onCreate - Step 2
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_Initialize(JNIEnv* env, jobject obj);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnStart(JNIEnv* env, jobject obj);
@@ -30,14 +31,19 @@ JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnWindowFocusChanged(
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchDown(JNIEnv* env, jobject obj, jfloat x, jfloat y);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchUp(JNIEnv* env, jobject obj, jfloat x, jfloat y);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchMove(JNIEnv* env, jobject obj, jfloat x, jfloat y);
-	
+
 };
 
-JNIEXPORT void JNICALL 
-Java_com_calyx_mainapp_MainActivity_PreInitialize(JNIEnv* env, jobject obj, jobject assetMgr)
+JNIEXPORT void JNICALL
+Java_com_calyx_mainapp_MainActivity_PreInitialize(JNIEnv* env, jobject obj, jobject assetMgr, jstring filesDir, jstring obbDir, jstring externalFilesDir)
 {
 	JNI_VERBOSE("%s: OnCreate (before creating SurfaceView)", __FUNCTION__);
-	android_pre_init();
+
+	const char* filesDirCstr = env->GetStringUTFChars(filesDir, JNI_FALSE);
+	const char* obbDirCstr = env->GetStringUTFChars(obbDir, JNI_FALSE);
+	const char* externalFilesDirCstr = env->GetStringUTFChars(externalFilesDir, JNI_FALSE);
+
+	android_pre_init(filesDirCstr, obbDirCstr, externalFilesDirCstr);
 }
 
 JNIEXPORT void JNICALL
@@ -104,11 +110,6 @@ Java_com_calyx_mainapp_MainActivity_OnDestroy(JNIEnv* env, jobject obj)
 JNIEXPORT void JNICALL
 Java_com_calyx_mainapp_MainActivity_OnWindowFocusChanged(JNIEnv* env, jobject obj, jboolean hasFocus)
 {
-	if (hasFocus) {
-		JNI_VERBOSE("Java_com_calyx_mainapp_MainActivity_OnWindowFocusChanged: true");
-	} else {
-		JNI_VERBOSE("Java_com_calyx_mainapp_MainActivity_OnWindowFocusChanged: false");
-	}
 	android_push_focus_event(hasFocus);
 }
 
