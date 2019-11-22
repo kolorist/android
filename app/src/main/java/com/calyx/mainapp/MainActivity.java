@@ -86,6 +86,12 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2 {
 		OnDestroy();
 	}
 
+	@Override
+	public void onBackPressed()
+	{
+		OnBackButtonPressed();
+	}
+
 	// surface
 
 	@Override
@@ -160,6 +166,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2 {
 	public native void OnResume();
 	public native void OnStop();
 	public native void OnDestroy();
+	public native void OnBackButtonPressed();
 	public native void OnWindowFocusChanged(boolean hasFocus);
 
 	// native input

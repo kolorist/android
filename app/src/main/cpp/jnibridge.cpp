@@ -2,6 +2,7 @@
 #include <android/log.h>
 #include <chrono>
 
+#include <calyx/platform/android/event_defs.h>
 #include <calyx/platform/android/system.h>
 #include <calyx/platform/android/entry_point.h>
 #include <android/native_window.h>
@@ -22,6 +23,7 @@ JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnPause(JNIEnv* env, 
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnResume(JNIEnv* env, jobject obj);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnStop(JNIEnv* env, jobject obj);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnDestroy(JNIEnv* env, jobject obj);
+JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnBackButtonPressed(JNIEnv* env, jobject obj);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_SurfaceCreated(JNIEnv* env, jobject obj, jobject surface);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_SurfaceDestroyed(JNIEnv* env, jobject obj, jobject surface);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_UpdateSurface(JNIEnv* env, jobject obj, jobject surface);
@@ -108,6 +110,12 @@ Java_com_calyx_mainapp_MainActivity_OnDestroy(JNIEnv* env, jobject obj)
 }
 
 JNIEXPORT void JNICALL
+Java_com_calyx_mainapp_MainActivity_OnBackButtonPressed(JNIEnv* env, jobject obj)
+{
+	android_push_key_event(CLX_BACK);
+}
+
+JNIEXPORT void JNICALL
 Java_com_calyx_mainapp_MainActivity_OnWindowFocusChanged(JNIEnv* env, jobject obj, jboolean hasFocus)
 {
 	android_push_focus_event(hasFocus);
@@ -117,14 +125,17 @@ Java_com_calyx_mainapp_MainActivity_OnWindowFocusChanged(JNIEnv* env, jobject ob
 JNIEXPORT void JNICALL
 Java_com_calyx_mainapp_MainActivity_OnTouchDown(JNIEnv* env, jobject obj, jfloat x, jfloat y)
 {
+	android_push_touch_down_event((unsigned int)x, (unsigned int)y);
 }
 
 JNIEXPORT void JNICALL
 Java_com_calyx_mainapp_MainActivity_OnTouchUp(JNIEnv* env, jobject obj, jfloat x, jfloat y)
 {
+	android_push_touch_up_event((unsigned int)x, (unsigned int)y);
 }
 
 JNIEXPORT void JNICALL
 Java_com_calyx_mainapp_MainActivity_OnTouchMove(JNIEnv* env, jobject obj, jfloat x, jfloat y)
 {
+	android_push_touch_move_event((unsigned int)x, (unsigned int)y);
 }
