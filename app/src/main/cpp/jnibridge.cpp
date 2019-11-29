@@ -33,6 +33,7 @@ JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnWindowFocusChanged(
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchDown(JNIEnv* env, jobject obj, jfloat x, jfloat y);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchUp(JNIEnv* env, jobject obj, jfloat x, jfloat y);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchMove(JNIEnv* env, jobject obj, jfloat x, jfloat y);
+JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnOrientationUpdate(JNIEnv* env, jobject obj, jfloat azimuth, jfloat pitch, jfloat roll);
 
 };
 
@@ -138,4 +139,10 @@ JNIEXPORT void JNICALL
 Java_com_calyx_mainapp_MainActivity_OnTouchMove(JNIEnv* env, jobject obj, jfloat x, jfloat y)
 {
 	android_push_touch_move_event((unsigned int)x, (unsigned int)y);
+}
+
+JNIEXPORT void JNICALL
+Java_com_calyx_mainapp_MainActivity_OnOrientationUpdate(JNIEnv* env, jobject obj, jfloat azimuth, jfloat pitch, jfloat roll)
+{
+	android_push_orientation_event((float)azimuth, (float)pitch, (float)roll);
 }
