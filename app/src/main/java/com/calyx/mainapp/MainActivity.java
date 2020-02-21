@@ -156,30 +156,45 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2
 	@Override
 	public boolean onTouchEvent(final MotionEvent ev)
 	{
-		float x = ev.getX();
-		float y = ev.getY();
-
-		switch (ev.getAction()) {
+		int pointerIndex = ev.getActionIndex();
+		int pointerId = ev.getPointerId(pointerIndex);
+		int maskedAction = ev.getActionMasked();
+		switch (maskedAction)
+		{
 			case MotionEvent.ACTION_DOWN:
-				{
-					OnTouchDown(x, y);
-					break;
-				}
+			case MotionEvent.ACTION_POINTER_DOWN:
+			{
+				float x = ev.getX(pointerIndex);
+				float y = ev.getY(pointerIndex);
+				OnTouchDown(pointerId, x, y);
+				break;
+			}
 			case MotionEvent.ACTION_MOVE:
+			{
+				// a pointer moved, we have to send everyone back
+				for (int i = 0; i < ev.getPointerCount(); i++)
 				{
-					OnTouchMove(x, y);
-					break;
+					int movePointerId = ev.getPointerId(i);
+					float x = ev.getX(i);
+					float y = ev.getY(i);
+					OnTouchMove(movePointerId, x, y);
 				}
+				break;
+			}
 			case MotionEvent.ACTION_UP:
-				{
-					OnTouchUp(x, y);
-					break;
-				}
+			case MotionEvent.ACTION_POINTER_UP:
+			case MotionEvent.ACTION_CANCEL:
+			{
+				float x = ev.getX(pointerIndex);
+				float y = ev.getY(pointerIndex);
+				OnTouchUp(pointerId, x, y);
+				break;
+			}
 			default:
 				break;
 		}
 
-		return super.onTouchEvent(ev);
+		return true;
 	}
 
 	public void onOrientationUpdated()
@@ -254,8 +269,8 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2
 	public native void OnWindowFocusChanged(boolean hasFocus);
 
 	// native input
-	public native void OnTouchDown(float x, float y);
-	public native void OnTouchMove(float x, float y);
-	public native void OnTouchUp(float x, float y);
+	public native void OnTouchDown(int pid, float x, float y);
+	public native void OnTouchMove(int pid, float x, float y);
+	public native void OnTouchUp(int pid, float x, float y);
 	public native void OnOrientationUpdate(float azimuth, float pitch, float roll);
 }

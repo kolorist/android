@@ -30,9 +30,9 @@ JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_UpdateSurface(JNIEnv*
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnWindowFocusChanged(JNIEnv* env, jobject obj, jboolean hasFocus);
 
 // input callback
-JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchDown(JNIEnv* env, jobject obj, jfloat x, jfloat y);
-JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchUp(JNIEnv* env, jobject obj, jfloat x, jfloat y);
-JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchMove(JNIEnv* env, jobject obj, jfloat x, jfloat y);
+JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchDown(JNIEnv* env, jobject obj, jint pid, jfloat x, jfloat y);
+JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchUp(JNIEnv* env, jobject obj, jint pid, jfloat x, jfloat y);
+JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnTouchMove(JNIEnv* env, jobject obj, jint pid, jfloat x, jfloat y);
 JNIEXPORT void JNICALL Java_com_calyx_mainapp_MainActivity_OnOrientationUpdate(JNIEnv* env, jobject obj, jfloat azimuth, jfloat pitch, jfloat roll);
 
 };
@@ -124,21 +124,21 @@ Java_com_calyx_mainapp_MainActivity_OnWindowFocusChanged(JNIEnv* env, jobject ob
 
 // input
 JNIEXPORT void JNICALL
-Java_com_calyx_mainapp_MainActivity_OnTouchDown(JNIEnv* env, jobject obj, jfloat x, jfloat y)
+Java_com_calyx_mainapp_MainActivity_OnTouchDown(JNIEnv* env, jobject obj, jint pid, jfloat x, jfloat y)
 {
-	android_push_touch_down_event((unsigned int)x, (unsigned int)y);
+	android_push_touch_down_event((unsigned int)pid, (unsigned int)x, (unsigned int)y);
 }
 
 JNIEXPORT void JNICALL
-Java_com_calyx_mainapp_MainActivity_OnTouchUp(JNIEnv* env, jobject obj, jfloat x, jfloat y)
+Java_com_calyx_mainapp_MainActivity_OnTouchUp(JNIEnv* env, jobject obj, jint pid, jfloat x, jfloat y)
 {
-	android_push_touch_up_event((unsigned int)x, (unsigned int)y);
+	android_push_touch_up_event((unsigned int)pid, (unsigned int)x, (unsigned int)y);
 }
 
 JNIEXPORT void JNICALL
-Java_com_calyx_mainapp_MainActivity_OnTouchMove(JNIEnv* env, jobject obj, jfloat x, jfloat y)
+Java_com_calyx_mainapp_MainActivity_OnTouchMove(JNIEnv* env, jobject obj, jint pid, jfloat x, jfloat y)
 {
-	android_push_touch_move_event((unsigned int)x, (unsigned int)y);
+	android_push_touch_move_event((unsigned int)pid, (unsigned int)x, (unsigned int)y);
 }
 
 JNIEXPORT void JNICALL
