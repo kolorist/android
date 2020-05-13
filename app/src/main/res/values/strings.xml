@@ -19,6 +19,6 @@
 
 <resources>
     <!-- Simple strings. -->
-    <string name="app_label">Insigne</string>
+    <string name="app_label">InsigneDev</string>
 
 </resources>

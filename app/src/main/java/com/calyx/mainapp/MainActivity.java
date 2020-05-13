@@ -23,7 +23,7 @@ public class MainActivity extends Activity implements SurfaceHolder.Callback2
 	{
 		super.onCreate(savedInstanceState);
 
-		System.loadLibrary("lucent");
+		System.loadLibrary("insigne_dev");
 		// get essential directories
 		m_Context = getApplicationContext();
 		File filesDir = m_Context.getFilesDir();
