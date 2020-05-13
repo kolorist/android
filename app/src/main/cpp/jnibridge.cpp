@@ -42,11 +42,27 @@ Java_com_calyx_mainapp_MainActivity_PreInitialize(JNIEnv* env, jobject obj, jobj
 {
 	JNI_VERBOSE("%s: OnCreate (before creating SurfaceView)", __FUNCTION__);
 
-	const char* filesDirCstr = env->GetStringUTFChars(filesDir, JNI_FALSE);
-	const char* obbDirCstr = env->GetStringUTFChars(obbDir, JNI_FALSE);
-	const char* externalFilesDirCstr = env->GetStringUTFChars(externalFilesDir, JNI_FALSE);
+	jboolean isCopyStr0 = JNI_FALSE;
+	const char* filesDirCstr = env->GetStringUTFChars(filesDir, &isCopyStr0);
+	jboolean isCopyStr1 = JNI_FALSE;
+	const char* obbDirCstr = env->GetStringUTFChars(obbDir, &isCopyStr1);
+	jboolean isCopyStr2 = JNI_FALSE;
+	const char* externalFilesDirCstr = env->GetStringUTFChars(externalFilesDir, &isCopyStr2);
 
 	android_pre_init(filesDirCstr, obbDirCstr, externalFilesDirCstr);
+	
+	if (isCopyStr0)
+	{
+		env->ReleaseStringUTFChars(filesDir, filesDirCstr);
+	}
+	if (isCopyStr1)
+	{
+		env->ReleaseStringUTFChars(obbDir, obbDirCstr);
+	}
+	if (isCopyStr2)
+	{
+		env->ReleaseStringUTFChars(externalFilesDir, externalFilesDirCstr);
+	}
 }
 
 JNIEXPORT void JNICALL
